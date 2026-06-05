@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT Brain — AI Video Summarizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Press+Start+2P&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Pixelify Sans', sans-serif;
+            min-height: 100vh;
+            background-image:url('/static/sky.gif');
+            background-repeat: repeat;
+            background-size: 100%;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 60px 20px 20px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .kitty {
+            width: 180px;
+            height: 180px;
+            image-rendering: pixelated;
+            display: block;
+            margin: 0px auto 0px auto;
+            transition: opacity 0.3s;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #f0d7dd;
+            letter-spacing: -1px;
+        }
+
+        /*h1 span { color: #ffa94d; }*/
+
+        .subtitle {
+            font-family: 'Pixelify Sans', sans-serif;
+            font-size: 1rem;
+            color: #020201;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .card {
+            background: #f8f7f2;
+            border-radius: 0;
+            padding: 20px;
+            width: 100%;
+            max-width: 620px;
+           /*box-shadow: 0 4px 4px rgb(250, 166, 212); */
+            border: 4px solid #000;
+        }
+
+        .input-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 3px solid #000;
+            border-radius: 0;
+            box-shadow: 6px 6px 0 #000;
+            font-size: 1rem;
+            font-family: 'Pixelify Sans', sans-serif;
+            outline: none;
+            transition: border 0.3s;
+            background: #faf4bc;
+            color: #333;
+        }
+
+        input:focus {
+            border-color: #000000;
+            background: white;
+        }
+
+        button {
+            width: 100%;            
+            margin-top: 16px;
+            padding: 16px 24px;
+            background: linear-gradient(90deg, #f8aec1);
+            color: white;
+            box-shadow: 6px 6px 0 #000;
+            border: 4px solid black;
+            border-radius: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Pixelify Sans', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-text {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #050404;
+            min-height: 24px;
+        }
+
+        #output {
+            font-family: 'Nunito', sans-serif;
+            display: none;
+            margin-top: 24px;
+            background: #fde9ed;
+            border-radius: 20px;
+            padding: 16px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: #444;
+            font-size: 0.97rem;
+            border: 2px solid #fafafa;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .output-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0f0d0b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: #ccc;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding-top: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>YT <span>Brain</span></h1>
+        <p class="subtitle">AI Video Summarizer — get a summary, key points & quiz instantly!</p>
+    </div>
+        <img src="/static/Idle.gif" alt="Kitty" class="kitty" id="kitty" />
+
+    <div class="card">
+        <label class="input-label">📎 Paste a YouTube link</label>
+        <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." />
+        <button onclick="analyze()" id="btn">Analyse!</button>
+        <div class="status-text" id="statusText"></div>
+
+        <div id="output">
+            <div id="outputText"></div>
+        </div>
+    </div>
+
+   
+
+    <script>
+        const kitty = document.getElementById("kitty");
+        const statusText = document.getElementById("statusText");
+
+        function setKittyState(state) {
+            const states = {
+                idle:     { gif: "/static/Idle.gif",     text: "" },
+                thinking: { gif: "/static/thinking.gif", text: "Reading..." },
+                result:   { gif: "/static/result.gif",   text: "Done! Here's what I found." }
+            };
+            kitty.src = states[state].gif + "?t=" + Date.now();
+            statusText.innerText = states[state].text;
+        }
+
+        async function analyze() {
+            const url = document.getElementById("urlInput").value;
+            if (!url) return alert("Paste a YouTube link first!");
+
+            document.getElementById("btn").disabled = true;
+            document.getElementById("output").style.display = "none";
+            setKittyState("thinking");
+
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({url})
+            });
+
+            const data = await response.json();
+            document.getElementById("outputText").innerText = data.result;
+            document.getElementById("output").style.display = "block";
+            document.getElementById("btn").disabled = false;
+            setKittyState("result");
+        }
+    </script>
+</body>
+</html>
