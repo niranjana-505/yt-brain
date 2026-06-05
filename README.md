@@ -17,7 +17,7 @@ Paste any YouTube link and get an instant summary, key bullet points, and quiz q
 
 ## 🎨 Custom Animations
 
-![Idle](static/Idle.gif)
+![Idle](static/idle.gif)
 ![Thinking](static/thinking.gif)
 ![Result](static/result.gif)
 ![Background](static/sky.gif)
