@@ -16,7 +16,6 @@ def get_transcript(url):
         'subtitleslangs': ['en'],
         'skip_download': True,
         'quiet': True,
-        'cookiesfile': 'cookies.txt',
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
