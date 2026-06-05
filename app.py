@@ -9,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))        
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 
@@ -57,36 +57,34 @@ def home():
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
-    try:
-        url = request.json.get("url")
+    url = request.json.get("url")
 
-        if not url:
-            return jsonify({"result": "No URL provided"})
+    if not url:
+        return jsonify({"result": "No URL provided"})
 
-        video_text = get_transcript(url)
+    video_text = get_transcript(url)
 
-        if not video_text:
-            return jsonify({"result": "Transcript unavailable for this video"})
+    if not video_text:
+        return jsonify({"result": "Transcript unavailable for this video"})
 
-        prompt = f"""
-Based on this YouTube video transcript, give:
+    prompt = f"""
+Based on this YouTube transcript, give:
 
-1. A short summary (4–15 sentences)
+1. A clear summary (4 to 15 sentences)
 2. 5 key bullet points
 3. 5 quiz questions with answers
 
-No markdown. No asterisks. Plain text only.
+No markdown. No symbols. Plain text only.
 
 Transcript:
 {video_text[:8000]}
 """
 
+    try:
         response = model.generate_content(prompt)
-
         return jsonify({"result": response.text})
-
     except:
-        return jsonify({"result": "Server error occurred"})
+        return jsonify({"result": "AI error occurred. Try again later."})
 
 
 if __name__ == "__main__":
