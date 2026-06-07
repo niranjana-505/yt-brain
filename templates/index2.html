@@ -166,6 +166,26 @@
                 padding-top: 40px;
             }
         }
+        @media (prefers-color-scheme: dark) {
+    .card {
+        background: #f8f7f2;
+        color: #444;
+    }
+    input {
+        background: #faf4bc;
+        color: #333;
+    }
+    #output {
+        background: #fde9ed;
+        color: #444;
+    }
+    .input-label {
+        color: #555;
+    }
+    .status-text {
+        color: #050404;
+    }
+}
     </style>
 </head>
 <body>
@@ -195,7 +215,7 @@
 
         function setKittyState(state) {
             const states = {
-                idle:     { gif: "/static/idle  .gif",     text: "" },
+                idle:     { gif: "/static/idle.gif",     text: "" },
                 thinking: { gif: "/static/thinking.gif", text: "Reading..." },
                 result:   { gif: "/static/result.gif",   text: "Done! Here's what I found." }
             };
