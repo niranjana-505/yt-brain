@@ -20,12 +20,11 @@ def get_transcript(url):
         with open("cookies.txt", "w") as f:
             f.write(cookies_content)
                     
-    import shutil
-if os.path.exists("/etc/secrets/cookies.txt"):
-    shutil.copy("/etc/secrets/cookies.txt", "/tmp/cookies.txt")
-    cookies_path = "/tmp/cookies.txt"
-else:
-    cookies_path = "cookies.txt"
+    if os.path.exists("/etc/secrets/cookies.txt"):
+        shutil.copy("/etc/secrets/cookies.txt", "/tmp/cookies.txt")
+        cookies_path = "/tmp/cookies.txt"
+    else:
+        cookies_path = "cookies.txt"
     
     ydl_opts = {
         'writesubtitles': True,
