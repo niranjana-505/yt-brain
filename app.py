@@ -1,3 +1,5 @@
+import shutil
+
 from dotenv import load_dotenv
 import os
 import re
@@ -18,7 +20,12 @@ def get_transcript(url):
         with open("cookies.txt", "w") as f:
             f.write(cookies_content)
                     
-    cookies_path = "/etc/secrets/cookies.txt" if os.path.exists("/etc/secrets/cookies.txt") else "cookies.txt"
+    import shutil
+if os.path.exists("/etc/secrets/cookies.txt"):
+    shutil.copy("/etc/secrets/cookies.txt", "/tmp/cookies.txt")
+    cookies_path = "/tmp/cookies.txt"
+else:
+    cookies_path = "cookies.txt"
     
     ydl_opts = {
         'writesubtitles': True,
