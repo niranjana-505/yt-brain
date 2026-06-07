@@ -12,7 +12,7 @@ Paste any YouTube link and get an instant summary, key bullet points, and quiz q
 ## Tech Stack
 - Python + Flask
 - Gemini 2.5 Flash API
-- YouTube transcript extraction via yt-dlp
+- YouTube Data API v3(official Google API)
 - HTML + CSS + JavaScript
 
 ## 🎨 Custom Animations
