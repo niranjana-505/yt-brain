@@ -18,7 +18,7 @@ def get_transcript(url):
         with open("cookies.txt", "w") as f:
             f.write(cookies_content)
                     
-    cookies_path = "cookies.txt"
+    cookies_path = "/etc/secrets/cookies.txt" if os.path.exists("/etc/secrets/cookies.txt") else "cookies.txt"
     
     ydl_opts = {
         'writesubtitles': True,
