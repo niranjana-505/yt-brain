@@ -13,6 +13,11 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 def get_transcript(url):
+    cookies_content = os.getenv("COOKIES_CONTENT")
+    if cookies_content:
+        with open("cookies.txt", "w") as f:
+            f.write(cookies_content)
+                    
     cookies_path = "cookies.txt"
     
     ydl_opts = {
