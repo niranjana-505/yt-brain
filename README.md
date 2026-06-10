@@ -16,7 +16,7 @@ Paste any YouTube link and get an instant summary, key bullet points, and quiz q
 - HTML + CSS + JavaScript
 
 ## Live Website
-  https://yt-brain-4n8f.onrender.com (https://yt-brain-4n8f.onrender.com/)
+  https://yt-brain-4n8f.onrender.com 
 
 ## 🎨 Custom Animations
 
